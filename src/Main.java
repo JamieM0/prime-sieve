@@ -16,6 +16,12 @@ public class Main {
     *
     * This could be activated, for example, by running the program with the -f flag. */
     public static void main(String[] args) {
+        Menu();
+    }
+
+    public static void Menu()
+    {
+        clearScreen();
         int choice = 0;
         System.out.println("Welcome to the Prime Number Sieve");
         System.out.println("===================================================");
@@ -38,7 +44,7 @@ public class Main {
                         PrimeFinder();
                         break;
                     case 2:
-                        //NextSmallestPrimeFinder();
+                        NextSmallestPrimeFinder();
                         break;
                     case 3:
                         System.exit(1);
@@ -54,18 +60,20 @@ public class Main {
                 System.out.println(ANSI_RED + "Sorry, there was an error. Try again.\nMore Details: " + ex + ANSI_RESET + "\n");
             }
         }
-
-
     }
-
     public static void PrimeFinder(){
+        String input = "";
         int value = 0;
         while(true)
         {
             System.out.print("Enter value to find prime numbers up to, or enter 'menu' to return to the main menu: ");
             try{
                 Scanner scanner = new Scanner(System.in);
-                value = scanner.nextInt();
+                input = scanner.next();
+                if(input.toLowerCase().equals("menu"))
+                    Menu();
+                else
+                    value = Integer.parseInt(input);
 
                 //Prime Number Finder
                 System.out.println("Here are the prime numbers up to " + value + ":\n");
@@ -109,5 +117,64 @@ public class Main {
                 System.out.println(ANSI_RED + "Sorry, there was an error. Try again.\nMore Details: " + ex + ANSI_RESET + "\n");
             }
         }
+    }
+
+    public static void NextSmallestPrimeFinder(){
+        int value = 0;
+        int largestPrime = 0;
+        while(true)
+        {
+            System.out.print("Enter value to find the biggest prime number that's less than (or equal to) the value, or enter 'menu' to return to the main menu: ");
+            try{
+                Scanner scanner = new Scanner(System.in);
+                value = scanner.nextInt();
+
+                //Prime Number Finder
+                if(isPrime(value))
+                {
+                    largestPrime=value;
+                }
+                else
+                {
+                    for(int i=value; i>0; i--)
+                    {
+                        if(isPrime(i))
+                        {
+                            largestPrime=i;
+                            break;
+                        }
+                    }
+                }
+
+                System.out.println("Largest prime up to this number is: " + largestPrime);
+
+                System.out.println(ANSI_GREEN + "\nDONE.\n" + ANSI_RESET);
+            }
+            catch(InputMismatchException ex)
+            {
+                System.out.println(ANSI_RED + "Unable to get a number. Try again." + ANSI_RESET + "\n");
+            }
+            catch(Exception ex)
+            {
+                System.out.println(ANSI_RED + "Sorry, there was an error. Try again.\nMore Details: " + ex + ANSI_RESET + "\n");
+            }
+        }
+    }
+
+    public static Boolean isPrime(int num)
+    {
+        if(num%2==0 || num<=1)
+            return false;
+        for(int i=3; i<num-1; i++)
+        {
+            if(num%i==0)
+                return false;
+        }
+        return true;
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
